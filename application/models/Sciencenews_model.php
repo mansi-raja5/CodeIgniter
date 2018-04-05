@@ -11,6 +11,17 @@ class Sciencenews_model extends CI_model{
 		$this->db->truncate('articles');
 	 
 	} 	
+	
+	//Get artcles from table 
+	public function get_articles(){	  
+		$this->db->select('*');
+		$this->db->from('articles');
+		$query=$this->db->get();
+		if($query)
+			return $query->result_array();
+		else
+			return false;
+	} 	
 }
 
 

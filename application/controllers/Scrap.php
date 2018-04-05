@@ -12,7 +12,7 @@ class Scrap extends CI_Controller {
 	public function index(){
 		$siteUrl = "https://www.sciencenews.org";
 		$html = file_get_html($siteUrl);
-		echo "<pre>";
+		//echo "<pre>";
 		$articlesAry = array();
 		$articles = $html->find('article h2');
 		$count = -1;
@@ -28,12 +28,15 @@ class Scrap extends CI_Controller {
 			}
 			//exit;
 		}
-		print_r($articlesAry);
+		//print_r($articlesAry);
 		$this->sciencenews_model->truncate_articles();
 		foreach($articlesAry as $art){
 			$this->sciencenews_model->add_articles($art);
 		}
-		exit;
+		
+		//Get All artcles from DB Table
+		$data['articles'] = $this->sciencenews_model->get_articles();
+		$this->load->view("science_news_view",$data);
 	}
 
 	public function traverseArticleToGetImage($articleUrl){
