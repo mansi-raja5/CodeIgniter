@@ -213,24 +213,6 @@ class Crawler{
 
     	return $this->clean_text($page_title->innertext);
     }
-	
-	/**
-	 * Get title tag from loaded URL
-	 *
-	 * @return 	string
-	 */
-    public function get_articles(){
-		$articles = array();
-		// Find all article blocks
-		foreach($this->dom->find('article') as $article) {
-			$item['title']     = $article->find('div.title', 0)->plaintext;
-			$item['intro']    = $article->find('div.intro', 0)->plaintext;
-			$item['details'] = $article->find('div.details', 0)->plaintext;
-			$articles[] = $item;
-		}
-
-    	return $articles;
-    }	
 
 	/**
 	 * Get meta description from loaded URL
