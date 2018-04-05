@@ -4,8 +4,9 @@ class Scrap extends CI_Controller {
 
 	public function __construct()
 	{
-		parent::__construct();// you have missed this line.
+		parent::__construct();
 		$this->load->library('crawler');
+		$this->load->model('sciencenews_model');
 	} 
 
 	public function index(){
@@ -28,6 +29,10 @@ class Scrap extends CI_Controller {
 			//exit;
 		}
 		print_r($articlesAry);
+		$this->sciencenews_model->truncate_articles();
+		foreach($articlesAry as $art){
+			$this->sciencenews_model->add_articles($art);
+		}
 		exit;
 	}
 
