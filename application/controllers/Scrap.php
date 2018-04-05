@@ -9,37 +9,23 @@ class Scrap extends CI_Controller {
 	} 
 
 	public function index(){
-		$site_url = "https://www.sciencenews.org/"; 
-		$site_data = $this->get_site_data($site_url, 1, 0);
+		$siteUrl = "https://www.sciencenews.org";
+		$html = file_get_html($siteUrl);
 		echo "<pre>";
-		var_dump($site_data);
-	}
-
-	private function get_site_data($site_url, $max_depth = 1, $current_depth = 0){
-		$current_depth++;
-
-		$this->load->library('crawler');
-
-		$site_data = array();
-
-		if($this->crawler->set_url($site_url) !== false){
-			$site_data['title'] = $this->crawler->get_title();
-			$site_data['description'] = $this->crawler->get_description();
-			$site_data['keywords'] = $this->crawler->get_keywords();
-			$site_data['text'] = $this->crawler->get_text();
-			$site_data['links'] = $this->crawler->get_links();
-
-			if($current_depth <= $max_depth){
-				foreach($site_data['links'] as $link_key => &$link){
-					$link['data'] = $this->get_site_data($link, $max_depth, $current_depth);
-				}
-			}
-
-			return $site_data;
+		$articlesAry = array();
+		$articles = $html->find('article h2');
+		$count = -1;
+		foreach($articles as $article) {
+			$articleName = $article->children(0)->plaintext;
+			$articleUrl = $article->find('a', 0)->href;
+			$articleUrl = $siteUrl.$articleUrl;
+			//echo "<br>";
+			$articlesAry[++$count]['name'] = $articleName;
+			$articlesAry[$count]['url'] = $articleUrl;
+			//print_r($article);
 		}
-		else{
-			return false;
-		}
+		print_r($articlesAry);
+		exit;
 	}
 
 }
